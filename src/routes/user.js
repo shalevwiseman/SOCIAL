@@ -4,7 +4,7 @@ import User, {validateUser} from '../model/user.js';
 
 const router = express.Router();
 
-// Get all users
+// Get all users...
 router.get('/', async (req, res) => {
     const users = await User.find().sort('username');
     return res.json({
