@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import Joi from 'joi';
+const mongoose = require('mongoose');
+const Joi = require('joi');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -65,6 +65,9 @@ const joiUserSchema = Joi.object({
 });
 
 // validation using Joi & finally return the result of validation
-export const validateUser = (user) => joiUserSchema.validate(user);
+const validateUser = (user) => joiUserSchema.validate(user);
 
-export default userModel;
+module.exports = {
+    validateUser,
+    userModel
+};

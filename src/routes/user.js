@@ -1,12 +1,13 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import User, {validateUser} from '../model/user.js';
+const express = require('express');
+const mongoose = require('mongoose');
+const { validateUser, userModel } = require('../model/user.js');
+
 
 const router = express.Router();
 
-// Get all users
+// Get all users...
 router.get('/', async (req, res) => {
-    const users = await User.find().sort('username');
+    const users = await userModel.find().sort('username');
     return res.json({
         success: true,
         data: users,
@@ -24,7 +25,7 @@ router.get('/:id', async (req, res) => {
         })
     }
     // search for the user in the database
-    const user = await User.findById(req.params.id);
+    const user = await userModel.findById(req.params.id);
     // check if user not found then return 404
     if (!user) {
         return res.status(404).json({
@@ -53,7 +54,7 @@ router.put('/:id', async (req, res) => {
         })
     }
     // find the user by id and update it with the request body
-    const user = await User.findByIdAndUpdate(req.params.id, {
+    const user = await userModel.findByIdAndUpdate(req.params.id, {
         username: req.body.username,
         email: req?.body?.email,
         password: req.body.password,
@@ -84,7 +85,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const userId = req.params.id;
     // find the user by id and delete it
-    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    const deletedUser = await userModel.findOneAndDelete({ _id: userId });
     // check if user not found then return 404
     if (!deletedUser) {
         return res.status(404).json({
@@ -116,7 +117,7 @@ router.post('/', async (req, res) => {
     }
 
     // check if the user already exists
-    let user = new User({
+    let user = new userModel({
         username: req.body.username,
         email: req?.body?.email,
         password: req.body.password,
@@ -134,8 +135,8 @@ router.post('/', async (req, res) => {
     return res.json({
         success: true,
         data: user,
-        message: 'New todo adding successful!',
+        message: 'New User adding successful!',
       })
 });
 
-export default router;
+module.exports = router;

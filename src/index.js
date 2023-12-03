@@ -1,12 +1,12 @@
 // importing libraries
-import 'dotenv/config'
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import RateLimit from 'express-rate-limit';
-import morgan from 'morgan';
-import mongoose from 'mongoose';
-import User from './routes/user.js';
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const RateLimit = require('express-rate-limit');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const User = require('./routes/user.js');
 
 const limiter = RateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -20,7 +20,7 @@ const app = express();
 // connecting to MongoDB
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('connected to MongoDB...'))
-    .catch(err => console.log('Could not connect to MongoDB...${err}'));
+    .catch(err => console.log(`Could not connect to MongoDB...${err}`));
 
 // middlewares
 app.use(cors()); // cross origin resource sharing
