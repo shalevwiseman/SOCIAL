@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
-import { feCheck,faTimes, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
+import { faCheck,faTimes, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import e from "cors";
+//import e from "cors";
 
 
 // validate user input
@@ -12,7 +12,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,50}$/;
 
 const Register = () => {
     const userRef = useRef();
-    const errdRef = useRef();
+    const errRef = useRef();
 
 // set states for user input
     const [user, setUser] = useState('');
@@ -71,7 +71,45 @@ const Register = () => {
 
     return (
         <section> 
+            
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <h1>Register</h1>
+            <form>
+                <label htmlFor="username">
+                    Username:
+                        <span className={validName ? "valid" : "hide"}>
+                            <FontAwesomeIcon icon={faCheck} />
+                        </span>
+                        <span className={validName || !user ? "hide" : "invalid"}>
+                            <FontAwesomeIcon icon={faTimes} />
+                        </span>
+
+                </label>
+                    <input
+                        type="text"
+                        // id is used for label htmlFor (need to be the same)
+                        id="username"
+                        // ref is used for focus
+                        ref={userRef}
+                        // value is used for user input
+                        autoComplete="off"
+                        // this will provide the event object and we can use it to get the value
+                        onChange={(e) => setUser(e.target.value)}
+                        required
+                        // aria-invalid is used for screen reader to read the error message
+                        aria-onInvalid={validName ? "false" : "true"}
+                        // full description of the error message
+                        aria-describedby="uidnote"
+                        // setting the focus
+                        onFocus={() => setUserFocus(true)}
+                        onBlur={() => setUserFocus(false)}
+                        />
+                        <p id="uidnote" className={userFocus && user && !validName ? "instruction" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            Username must be 4-30<br />
+                            characters long and can only contain letters, numbers, hyphens, and underscores.
+                        </p>
+            </form>
 
         
         </section>
