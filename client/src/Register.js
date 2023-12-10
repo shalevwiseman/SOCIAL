@@ -182,7 +182,17 @@ const Register = () => {
                             Must be a valid email address.
                         </p>
 
+                        <button
+                        // if any of the input is invalid, disable the button
+                        disabled={!validName || !validEmail || !validPwd || !validMatchPwd ? true : false}
+                        >Sing Up</button>
+
             </form>
+            Already registered?<br />
+            <span className="line">
+                {/*put router link here*/}
+                <a href="#put here link to the sing in page">Sing In</a>
+            </span>
 
         
         </section>
