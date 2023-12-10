@@ -1,13 +1,15 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck,faTimes, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import e from "cors";
+import axios from "./api/axios";
+
 
 
 // validate user input
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,30}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,50}$/;
+const REGISTER_URL = '/register';
 
 
 const Register = () => {
@@ -69,12 +71,45 @@ const Register = () => {
         setErrMsg('');
     }, [userFocus, emailFocus, pwdFocus, matchPwdFocus]);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(REGISTER_URL,JSON.stringify({username: user, email: email, password: pwd}),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                 withCredentials: true
+            }
+            );
+            console.log(response.data);
+            console.log(response.accessToken);
+            console.log(JSON.stringify(response))
+            setSuccess(true);
+            // clear the form
+            setUser('');
+            setEmail('');
+            setPwd('');
+            setMatchPwd('');
+
+
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg('Network error. Please try again later.');
+            } else if (err.response.status === 409) {
+                setErrMsg("Username or email already exists. Please try again.");
+            }else {
+                setErrMsg("Something went wrong. Please try again later.");
+            }
+            errRef.current.focus();
+        }
+
+    };
+
     return (
         <section> 
             
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Register</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 
                 <label htmlFor="username">
                     Username:
