@@ -105,7 +105,7 @@ router.delete('/:id', async (req, res) => {
 
 
 // insert a new user
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
     // validate the request body first
     const {error} = validateUser(req.body);
     if (error) { 
