@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const { validateUser, userModel } = require('../model/user.js');
 
 
+
 const router = express.Router();
+
+
 
 // Get all users...
 router.get('/', async (req, res) => {
