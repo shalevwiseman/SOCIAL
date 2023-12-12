@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { validateUser, userModel } = require('../model/user.js');
+const e = require('express');
 
 
 
@@ -105,7 +106,46 @@ router.delete('/:id', async (req, res) => {
         })
 });
 
+// folow a user
+router.put('/:id/follow', async (req, res) => {
+    // check if its the same user
+    if (req.body.userId !== req.params.id) {
+        try {
 
+            const user = await userModel.findById(req.params.id);
+            const currentUser = await userModel.findById(req.body.userId);
+            if (!user.followers.includes(req.body.userId)){
+                await user.updateOne({ $push: { followers: req.body.userId } });
+                await currentUser.updateOne({ $push: { following: req.params.id } });
+                return res.status(200).json({
+                    success: true,
+                    data: [],
+                    message: 'User has been followed',
+                })
+                
+            }else{
+                return res.status(403).json({
+                    success: false,
+                    data: [],
+                    message: 'You already follow this user',
+                })
+            }
+
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                data: [],
+                message: err,
+            })
+        }
+    }else{
+        return res.status(403).json({
+            success: false,
+            data: [],
+            message: 'You cant follow yourself',
+        })
+    }
+});
 
 // insert a new user
 router.post('/register', async (req, res) => {
