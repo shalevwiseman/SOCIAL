@@ -111,7 +111,6 @@ router.put('/:id/follow', async (req, res) => {
     // check if its the same user
     if (req.body.userId !== req.params.id) {
         try {
-
             const user = await userModel.findById(req.params.id);
             const currentUser = await userModel.findById(req.body.userId);
             if (!user.followers.includes(req.body.userId)){
@@ -147,39 +146,6 @@ router.put('/:id/follow', async (req, res) => {
     }
 });
 
-// insert a new user
-router.post('/register', async (req, res) => {
-    // validate the request body first
-    const {error} = validateUser(req.body);
-    if (error) { 
-        return res.status(400).json({
-        success: false,
-        data: [],
-        message: error?.details[0]?.message,
-      })
-    }
 
-    // check if the user already exists
-    let user = new userModel({
-        username: req.body.username,
-        email: req?.body?.email,
-        password: req.body.password,
-        profilePicture: req.body.profilePicture,
-        bio: req.body.bio,
-        followers: req.body.followers,
-        following: req.body.following,
-        posts: req.body.posts,
-        isAdmin: req.body.isAdmin
-    });
-
-
-    user = await user.save();
-
-    return res.json({
-        success: true,
-        data: user,
-        message: 'New User adding successful!',
-      })
-});
 
 module.exports = router;
