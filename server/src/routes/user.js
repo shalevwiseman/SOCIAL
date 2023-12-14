@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { validateUser, userModel } = require('../model/user.js');
+const e = require('express');
 
 
 
@@ -105,41 +106,85 @@ router.delete('/:id', async (req, res) => {
         })
 });
 
+// folow a user
+router.put('/:id/follow', async (req, res) => {
+    // check if its the same user
+    if (req.body.userId !== req.params.id) {
+        try {
+            const user = await userModel.findById(req.params.id);
+            const currentUser = await userModel.findById(req.body.userId);
+            if (!user.followers.includes(req.body.userId)){
+                await user.updateOne({ $push: { followers: req.body.userId } });
+                await currentUser.updateOne({ $push: { following: req.params.id } });
+                return res.status(200).json({
+                    success: true,
+                    data: [],
+                    message: 'User has been followed',
+                })
+                
+            }else{
+                return res.status(403).json({
+                    success: false,
+                    data: [],
+                    message: 'You already follow this user',
+                })
+            }
 
-
-// insert a new user
-router.post('/register', async (req, res) => {
-    // validate the request body first
-    const {error} = validateUser(req.body);
-    if (error) { 
-        return res.status(400).json({
-        success: false,
-        data: [],
-        message: error?.details[0]?.message,
-      })
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                data: [],
+                message: err,
+            })
+        }
+    }else{
+        return res.status(403).json({
+            success: false,
+            data: [],
+            message: 'You cant follow yourself',
+        })
     }
-
-    // check if the user already exists
-    let user = new userModel({
-        username: req.body.username,
-        email: req?.body?.email,
-        password: req.body.password,
-        profilePicture: req.body.profilePicture,
-        bio: req.body.bio,
-        followers: req.body.followers,
-        following: req.body.following,
-        posts: req.body.posts,
-        isAdmin: req.body.isAdmin
-    });
-
-
-    user = await user.save();
-
-    return res.json({
-        success: true,
-        data: user,
-        message: 'New User adding successful!',
-      })
 });
+
+// unfollow a user 
+router.put('/:id/unfollow', async (req, res) => {
+    // check if its the same user
+    if (req.body.userId !== req.params.id) {
+        try {
+            const user = await userModel.findById(req.params.id);
+            const currentUser = await userModel.findById(req.body.userId);
+            if (user.followers.includes(req.body.userId)){
+                await user.updateOne({ $pull: { followers: req.body.userId } });
+                await currentUser.updateOne({ $pull: { following: req.params.id } });
+                return res.status(200).json({
+                    success: true,
+                    data: [],
+                    message: 'User has been unfollowed',
+                })
+                
+            }else{
+                return res.status(403).json({
+                    success: false,
+                    data: [],
+                    message: 'You dont follow this user',
+                })
+            }
+
+        }catch(err){
+            return res.status(500).json({
+                success: false,
+                data: [],
+                message: err,
+            })
+        }
+    }else{
+        return res.status(403).json({
+            success: false,
+            data: [],
+            message: 'You cant unfollow yourself',
+        })
+    }
+});
+
 
 module.exports = router;

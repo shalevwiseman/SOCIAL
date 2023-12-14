@@ -6,7 +6,9 @@ const helmet = require('helmet');
 const RateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const User = require('./routes/user.js');
+const userRouter = require('./routes/user.js');
+const authRouter = require('./routes/auth.js');
+const postsRouter = require('./routes/posts.js');
 
 const allowedOrigins = ['http://localhost:3000']; // Update with your React client's actual origin
 
@@ -41,7 +43,9 @@ app.use(
   );
 // When a POST request is made to '/api/register', it will be handled by the router logic defined in user.js.
 // This helps in organizing your code and separating concerns related to user registration from other parts of your application.
-app.use('/api/user', User)
+app.use('/api/user', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/posts', postsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => 
