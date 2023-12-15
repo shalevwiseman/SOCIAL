@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck,faTimes, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
+import Topbar from "../components/topbar/Topbar";
+import '../index.css'
 
 
 
@@ -110,7 +112,10 @@ const Register = () => {
     };
 
     return (
+        <div>
+        <Topbar />    
         <section> 
+        
             
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Register</h1>
@@ -234,8 +239,9 @@ const Register = () => {
                 <a href="#put here link to the sing in page">Sing In</a>
             </span>
 
-        
+            
         </section>
+        </div>
     );
 };
 

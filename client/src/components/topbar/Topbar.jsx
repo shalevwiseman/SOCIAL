@@ -9,6 +9,7 @@ export default function Topbar() {
         </div>
             <div className="topbarCenter">
                 <div className="searchbar">
+                    
                     <input 
                     placeholder="Search for friend, post or video" 
                     className="searchInput"
@@ -20,6 +21,7 @@ export default function Topbar() {
                     <span className="topbarLink">Homepage</span>
                     <span className="topbarLink">Timeline</span>
             </div>
+            <img src="/assets/person/1.png" alt="" className="topbarImg" />
                  
         </div>
     </div>
