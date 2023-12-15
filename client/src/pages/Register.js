@@ -9,7 +9,7 @@ import axios from "../api/axios";
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,30}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,50}$/;
-const REGISTER_URL = '/api/user/register';
+const REGISTER_URL = '/api/auth/register';
 
 
 const Register = () => {
