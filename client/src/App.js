@@ -1,11 +1,9 @@
-import Register from './pages/Register';
-
+import Register from './pages/Register/Register';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
-    <main className='App'>
-      <Register />
-    </main>
+    <Home />
   );
 }
 

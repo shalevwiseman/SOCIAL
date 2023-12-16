@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck,faTimes, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "../api/axios";
+import axios from "../../api/axios";
+import Topbar from "../../components/topbar/Topbar";
+import "./register.css";
 
 
 
@@ -9,7 +11,7 @@ import axios from "../api/axios";
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,30}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,50}$/;
-const REGISTER_URL = '/api/user/register';
+const REGISTER_URL = '/api/auth/register';
 
 
 const Register = () => {
@@ -110,7 +112,10 @@ const Register = () => {
     };
 
     return (
+        <div>
+        <Topbar />    
         <section> 
+        
             
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <h1>Register</h1>
@@ -234,8 +239,9 @@ const Register = () => {
                 <a href="#put here link to the sing in page">Sing In</a>
             </span>
 
-        
+            
         </section>
+        </div>
     );
 };
 
