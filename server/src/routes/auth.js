@@ -36,6 +36,7 @@ router.post('/register', async (req, res) => {
 
 
     user = await user.save();
+    res.redirect('/signin');
 
     return res.json({
         success: true,
