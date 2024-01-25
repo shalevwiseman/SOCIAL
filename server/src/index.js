@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const userRouter = require('./routes/user.js');
 const authRouter = require('./routes/auth.js');
 const postsRouter = require('./routes/posts.js');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 const allowedOrigins = ['http://localhost:3000']; // Update with your React client's actual origin
 
@@ -33,7 +35,8 @@ app.use(helmet()); // security
 app.use(limiter); // rate limiting
 app.use(morgan('tiny')); // logging
 app.use(express.json()); // body parsing
-
+// Initialize Passport
+app.use(passport.initialize());
 
 app.use(
     cors({
@@ -46,6 +49,8 @@ app.use(
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postsRouter);
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => 

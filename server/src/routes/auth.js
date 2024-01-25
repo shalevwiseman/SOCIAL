@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { validateUser, userModel } = require('../model/user.js');
 const e = require('express');
+const bcrypt = require('bcrypt');
 
 
 
@@ -24,7 +25,7 @@ router.post('/register', async (req, res) => {
     let user = new userModel({
         username: req.body.username,
         email: req?.body?.email,
-        password: req.body.password,
+        password: await bcrypt.hash(req.body.password, 10),
         profilePicture: req.body.profilePicture,
         bio: req.body.bio,
         followers: req.body.followers,
