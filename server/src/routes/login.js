@@ -3,12 +3,6 @@ const passport = require('passport');
 const router = express.Router();
 
 
-
-
-
-
-
-
 // Handle user login
 router.post('/', passport.authenticate('local', {
     successRedirect: '/', // Redirect on successful login
@@ -17,7 +11,7 @@ router.post('/', passport.authenticate('local', {
 }));
 
 
-router.get('/test', (req, res) => {
+router.get('/', (req, res) => {
     res.send('This is a test route.');
 });
 
