@@ -11,11 +11,10 @@ const authRouter = require('./routes/auth.js');
 const postsRouter = require('./routes/posts.js');
 const signinRoute = require('./routes/login.js');
 const passport = require('passport');
-const flash = require('express-flash');
+const flash = require('connect-flash');
 const session = require('express-session');
 const { validateUser, userModel } = require('./model/user.js');
 const LocalStrategy = require('passport-local').Strategy;
-
 
 
 
@@ -46,7 +45,7 @@ app.use(flash());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -66,16 +65,17 @@ passport.use(new LocalStrategy({
         const user = await userModel.findOne({ email });
 
         if (!user) {
+            console.log('user not found');
             return done(null, false, { message: 'Invalid email or password' });
         }
 
-        console.log(user);
         const isPasswordValid = await user.validatePassword(password);
 
         if (!isPasswordValid) {
+            console.log('password not valid');
             return done(null, false, { message: 'Invalid email or password' });
         }
-
+        console.log('user authenticated');
         return done(null, user);
     } catch (err) {
         return done(err);
@@ -109,6 +109,7 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/signin', signinRoute);
+
 
 
 

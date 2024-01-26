@@ -7,9 +7,9 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(''); // Keep track of the login errors
-    const [success, setSuccess] = useState(false);
-
     
+
+
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };

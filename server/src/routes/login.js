@@ -6,14 +6,18 @@ const router = express.Router();
 // Handle user login
 router.post('/', passport.authenticate('local', {
     successRedirect: '/', // Redirect on successful login
-    failureRedirect: '/',    // Redirect on failed login
+    failureRedirect: '/api/signin',    // Redirect on failed login
     failureFlash: true,           // Enable flash messages for error handling
 }));
 
 
+// Handle user logout
 router.get('/', (req, res) => {
-    res.send('This is a test route.');
-});
-
+    // Check for flash messages
+    const errorMessages = req.flash('error');
+    
+    // Send the error messages as JSON
+    res.json({ errors: errorMessages });
+  });
 
 module.exports = router;
