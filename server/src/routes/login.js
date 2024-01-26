@@ -1,20 +1,21 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
-const users = require('../model/user.js');
 
 
 
 
 
 
-// Define the sign-in route
-router.post('/signin', passport.authenticate('local', {
-    successRedirect: '/api/signin',
-    failureRedirect: '/api/signin',
-    failureFlash: true
-})
-);
+
+
+// Handle user login
+router.post('/', passport.authenticate('local', {
+    successRedirect: '/', // Redirect on successful login
+    failureRedirect: '/',    // Redirect on failed login
+    failureFlash: true,           // Enable flash messages for error handling
+}));
+
 
 router.get('/test', (req, res) => {
     res.send('This is a test route.');

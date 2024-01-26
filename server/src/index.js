@@ -13,14 +13,9 @@ const signinRoute = require('./routes/login.js');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
+const { validateUser, userModel } = require('./model/user.js');
+const LocalStrategy = require('passport-local').Strategy;
 
-const initializePassport = require('./routes/passport-config.js');
-const users = require('./model/user.js');
-initializePassport(
-    passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-);
 
 
 
@@ -51,17 +46,60 @@ app.use(flash());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(
     cors({
         origin: allowedOrigins,
         credentials: true,
     })
   );
+
+// passport config
+passport.use(new LocalStrategy({
+    usernameField: 'email', // Assuming you use email for login
+    passwordField: 'password',
+}, async (email, password, done) => {
+    try {
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        console.log(user);
+        const isPasswordValid = await user.validatePassword(password);
+
+        if (!isPasswordValid) {
+            return done(null, false, { message: 'Invalid email or password' });
+        }
+
+        return done(null, user);
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+
+
+// Serialize user for session storage
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+// Deserialize user from session storage
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await userModel.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    }
+});
+
+
+
 
 
 

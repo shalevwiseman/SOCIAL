@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
+
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -47,6 +49,11 @@ const userSchema = new mongoose.Schema({
     
 });
 
+// Define a method to validate the password
+userSchema.methods.validatePassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+};
+
 // create a model by mogoose
 const userModel = mongoose.model('User', userSchema);
 
@@ -65,6 +72,8 @@ const joiUserSchema = Joi.object({
 
 // validation using Joi & finally return the result of validation
 const validateUser = (user) => joiUserSchema.validate(user);
+
+
 
 module.exports = {
     validateUser,
